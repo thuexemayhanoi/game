@@ -91,43 +91,38 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          {
-            echo "Browser smoke test failure on commit $GITHUB_SHA."
-            echo "CI run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
-            echo ""
-            echo "## Diagnostics"
-            echo "- build directory tree:"
-            echo ' ``` '
-            find build -type f | head -50
-            echo ' ``` '
-            echo "- serve.mjs direct probe (from tests/browser, port 8001):"
-            echo ' ``` '
-            cd tests/browser
-            (node serve.mjs ../build/web 8001 >/dev/null 2>&1 &)
-            sleep 2
-            curl -s -o /tmp/probe.html -w "http=%{http_code} type=%{content_type}
-" http://localhost:8001/index.html
-            grep -c "<canvas" /tmp/probe.html || echo "NO CANVAS IN SERVED HTML"
-            cd ../..
-            echo ' ``` '
-            echo ""
-            echo "## Playwright output"
-            echo ' ``` '
-          } > issue-body.md
           set +e
           npx playwright test --config tests/browser/playwright.config.ts --reporter=list 2>&1 | tee playwright-output.log
           status=${PIPESTATUS[0]}
           set -e
-          {
-            tail -c 30000 playwright-output.log
-            echo ' ``` '
-            echo ""
-            echo "## Playwright page snapshot (error-context)"
-            echo ' ``` '
-            find tests/browser/test-results -name error-context.md | head -1 | xargs cat 2>/dev/null | head -100
-            echo ' ``` '
-          } >> issue-body.md
           if [ "$status" -ne 0 ]; then
+            {
+              echo "Browser smoke test failure on commit $GITHUB_SHA."
+              echo "CI run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+              echo ""
+              echo "## Build directory tree"
+              echo '~~~'
+              find build -type f | head -50
+              echo '~~~'
+              echo "## Serve probe (serve.mjs from tests/browser on port 8001)"
+              echo '~~~'
+              cd tests/browser
+              (node serve.mjs ../build/web 8001 >/dev/null 2>&1 &)
+              sleep 2
+              curl -s -o /tmp/probe.html -w 'http=%{http_code} type=%{content_type}' http://localhost:8001/index.html
+              echo ''
+              grep -c '<canvas' /tmp/probe.html || echo 'NO CANVAS IN SERVED HTML'
+              cd ../..
+              echo '~~~'
+              echo "## Playwright output"
+              echo '~~~'
+              tail -c 30000 playwright-output.log
+              echo '~~~'
+              echo "## Playwright page snapshot (error-context)"
+              echo '~~~'
+              find tests/browser/test-results -name error-context.md | head -1 | xargs cat 2>/dev/null | head -100
+              echo '~~~'
+            } > issue-body.md
             gh issue create --title "browser-smoke failure: run $GITHUB_RUN_ID" --body-file issue-body.md || true
           fi
           exit "$status"
