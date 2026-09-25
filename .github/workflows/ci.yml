@@ -70,6 +70,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: godot
     timeout-minutes: 20
+    permissions:
+      contents: read
+      issues: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -85,4 +88,22 @@ jobs:
           npm install --no-fund --no-audit -D @playwright/test
           npx playwright install --with-deps chromium
       - name: Run browser smoke tests (5 viewports)
-        run: npx playwright test --config tests/browser/playwright.config.ts
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set +e
+          npx playwright test --config tests/browser/playwright.config.ts --reporter=list 2>&1 | tee playwright-output.log
+          status=${PIPESTATUS[0]}
+          set -e
+          if [ "$status" -ne 0 ]; then
+            {
+              echo "Browser smoke test failure on commit $GITHUB_SHA."
+              echo "CI run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+              echo ""
+              echo ' ``` '
+              tail -c 50000 playwright-output.log
+              echo ' ``` '
+            } > issue-body.md
+            gh issue create --title "browser-smoke failure: run $GITHUB_RUN_ID" --body-file issue-body.md || true
+          fi
+          exit "$status"
