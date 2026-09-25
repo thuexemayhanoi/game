@@ -1,2 +1,2 @@
 release_id,version,platforms,status,commit,artifact_url,notes
-R-0001,0.1.0,web,PLANNED,,,Bootstrap release: vertical slice web build
+R-0001,0.1.0,web,RELEASED,399599260b8fc9ea6d72a6abd58c992bd352d279,https://thuexemayhanoi.github.io/game/,Bootstrap release: vertical slice web build deployed from verified CI
