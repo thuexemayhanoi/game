@@ -1,0 +1,1 @@
+# Vehicle assets\n\nReserved for original vehicle art. See docs/ASSET-POLICY.md.\n

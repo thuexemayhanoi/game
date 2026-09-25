@@ -1,0 +1,1 @@
+# Audio assets\n\nReserved for original audio. See docs/ASSET-POLICY.md.\n

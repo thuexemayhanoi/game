@@ -1,0 +1,25 @@
+{
+  "save_version": 1,
+  "profile": {
+    "name": "FixtureRider",
+    "created_at": 0
+  },
+  "wallet": {
+    "balance": 100
+  },
+  "bikes": [
+    "song_hong_50"
+  ],
+  "upgrades": {},
+  "mission_progress": {},
+  "world_unlocks": {
+    "districts": [],
+    "landmarks": []
+  },
+  "settings": {},
+  "achievements": [],
+  "statistics": {
+    "distance_ridden": 0,
+    "missions_completed": 0
+  }
+}

@@ -1,0 +1,57 @@
+; Engine configuration file.
+config_version=5
+
+[application]
+
+config/name="Hanoi Rider: Open City"
+config/description="Original open-world motorbike action game set in a fictional Hanoi-inspired city."
+config/version="0.1.0"
+run/main_scene="res://src/world/test_world.tscn"
+config/features=PackedStringArray("4.7")
+boot/enable_console=true
+
+[audio]
+
+buses/default_bus_layout=""
+
+[autoload]
+
+GameState="*res://src/core/game_state.gd"
+InputAdapter="*res://src/platform/input_adapter.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+window/handheld/orientation=1
+
+[input]
+
+throttle={
+"deadzone": 0.2,
+"events": []
+}
+brake={
+"deadzone": 0.2,
+"events": []
+}
+steer_left={
+"deadzone": 0.2,
+"events": []
+}
+steer_right={
+"deadzone": 0.2,
+"events": []
+}
+reset_bike={
+"deadzone": 0.2,
+"events": []
+}
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true

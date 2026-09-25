@@ -1,0 +1,1 @@
+# UI assets\n\nReserved for original UI art. See docs/ASSET-POLICY.md.\n

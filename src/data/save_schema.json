@@ -1,0 +1,54 @@
+{
+  "save_version": 1,
+  "description": "Versioned save schema for Hanoi Rider. See docs/SAVE-SYSTEM.md.",
+  "profile": {
+    "type": "object",
+    "keys": {
+      "name": "string",
+      "created_at": "int"
+    }
+  },
+  "wallet": {
+    "type": "object",
+    "keys": {
+      "balance": "int"
+    }
+  },
+  "bikes": {
+    "type": "array",
+    "item": "bike_id:string + upgrades:object + condition:float"
+  },
+  "upgrades": {
+    "type": "object"
+  },
+  "mission_progress": {
+    "type": "object",
+    "keys": {
+      "mission_id": {
+        "completed": "bool",
+        "reward_claimed": "bool"
+      }
+    }
+  },
+  "world_unlocks": {
+    "type": "object",
+    "keys": {
+      "districts": "array[string]",
+      "landmarks": "array[string]"
+    }
+  },
+  "settings": {
+    "type": "object"
+  },
+  "achievements": {
+    "type": "array[string]"
+  },
+  "statistics": {
+    "type": "object",
+    "keys": {
+      "distance_ridden": "float",
+      "missions_completed": "int"
+    }
+  },
+  "migrations": []
+}

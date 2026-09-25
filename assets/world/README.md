@@ -1,0 +1,1 @@
+# World assets\n\nReserved for original world art. See docs/ASSET-POLICY.md.\n

@@ -1,0 +1,1 @@
+# Placeholder assets\n\nOriginal primitive placeholder geometry only. See docs/ASSET-POLICY.md.\n

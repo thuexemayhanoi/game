@@ -1,0 +1,50 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://src/world/test_world.gd" id="1_world"]
+[ext_resource type="Script" path="res://src/player/chase_camera.gd" id="2_cam"]
+[ext_resource type="Script" path="res://src/ui/speed_hud.gd" id="3_hud"]
+
+[sub_resource type="PlaneMesh" id="ground_mesh"]
+size = Vector2(500, 500)
+
+[sub_resource type="StandardMaterial3D" id="ground_mat"]
+albedo_color = Color(0.35, 0.5, 0.3, 1)
+
+[sub_resource type="BoxMesh" id="road_mesh"]
+size = Vector3(14, 0.1, 500)
+
+[sub_resource type="StandardMaterial3D" id="road_mat"]
+albedo_color = Color(0.22, 0.22, 0.24, 1)
+
+[sub_resource type="Environment" id="env"]
+background_mode = 1
+background_color = Color(0.55, 0.75, 0.95, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.7, 0.75, 0.8, 1)
+ambient_light_energy = 1.0
+
+[node name="TestWorld" type="Node3D"]
+script = ExtResource("1_world")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation = Vector3(-0.9, 0.6, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("env")
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+mesh = SubResource("ground_mesh")
+surface_material_override/0 = SubResource("ground_mat")
+
+[node name="Road" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+mesh = SubResource("road_mesh")
+surface_material_override/0 = SubResource("road_mat")
+
+[node name="ChaseCamera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 8)
+script = ExtResource("2_cam")
+
+[node name="SpeedHud" type="CanvasLayer" parent="."]
+script = ExtResource("3_hud")

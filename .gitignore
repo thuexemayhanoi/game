@@ -1,0 +1,31 @@
+# Godot
+.godot/
+*.translation
+export_credentials.cfg
+
+# Builds
+build/
+export/
+*.apk
+*.aab
+*.ipa
+*.exe
+*.pck
+
+# CI / tooling
+node_modules/
+test_results/
+playwright-report/
+.pytest_cache/
+__pycache__/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets — never commit
+*.keystore
+*.jks
+*.p12
+*.mobileprovision
+secrets.*
