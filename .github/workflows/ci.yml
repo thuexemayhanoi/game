@@ -91,19 +91,33 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          {
+            echo "Browser smoke test failure on commit $GITHUB_SHA."
+            echo "CI run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            echo ""
+            echo "## Diagnostics"
+            echo "- cwd: $(pwd)"
+            echo "- build directory tree:"
+            echo ' ``` '
+            find build -type f | head -50
+            echo ' ``` '
+            echo "- index.html served check (first 5 lines):"
+            echo ' ``` '
+            head -5 build/web/index.html 2>&1
+            echo ' ``` '
+            echo ""
+            echo "## Playwright output"
+            echo ' ``` '
+          } > issue-body.md
           set +e
           npx playwright test --config tests/browser/playwright.config.ts --reporter=list 2>&1 | tee playwright-output.log
           status=${PIPESTATUS[0]}
           set -e
+          {
+            tail -c 50000 playwright-output.log
+            echo ' ``` '
+          } >> issue-body.md
           if [ "$status" -ne 0 ]; then
-            {
-              echo "Browser smoke test failure on commit $GITHUB_SHA."
-              echo "CI run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
-              echo ""
-              echo ' ``` '
-              tail -c 50000 playwright-output.log
-              echo ' ``` '
-            } > issue-body.md
             gh issue create --title "browser-smoke failure: run $GITHUB_RUN_ID" --body-file issue-body.md || true
           fi
           exit "$status"
