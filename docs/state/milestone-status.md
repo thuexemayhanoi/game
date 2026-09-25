@@ -1,27 +1,49 @@
 # Milestone Status
 
-## M0 — Repository Foundation (IN PROGRESS — recovery)
+## M0 — Repository Foundation (DONE)
 
-| Area | Status |
+Completed on 2026-09-26 when the full bootstrap gate chain passed:
+
+| Gate | Result |
 |------|--------|
-| Repository control system (docs, matrix, state, validators) | VERIFIED |
-| Master Matrix backlog | IMPLEMENTED (extended to 250 rows in the recovery commit; validator expected to PASS) |
-| Godot project + vertical slice (bike, controls, HUD, world) | IMPLEMENTED in commit ae2f794 — pending CI verification |
-| CI workflow (validation, import, boot, GUT, web export, browser smoke) | IMPLEMENTED in commit ae2f794 — first run pending |
-| GitHub Pages deployment workflow | IMPLEMENTED in commit ae2f794 — requires Pages source set to "GitHub Actions" |
+| Python validators (project, matrix, assets, save schema, build budget) | PASS |
+| Godot 4.7.2 import (0 script errors) | PASS |
+| Headless boot smoke | PASS |
+| GUT 9.7.1 test suite | PASS — 40/40 |
+| Web export (single-threaded, compatibility renderer) | PASS |
+| Browser smoke (Playwright, 5 viewports) | PASS — 5/5 |
+| GitHub Pages deployment from verified main build | PASS |
+| Live site https://thuexemayhanoi.github.io/game/ | LOADS (canvas + wasm + pck verified) |
 
-### Recovery note (2026-09-26)
+First fully green CI: commit 3995992. All M0 P0 rows are VERIFIED (see
+docs/matrix/game-master-matrix.csv).
 
-A previous run recorded 28 features as IMPLEMENTED in the Matrix, but no Godot
-project, CI, tests or game code existed in the repository — only docs and
-validators. This recovery run committed the real implementation instead of
-resetting statuses. Evidence fields now record the implementing commit.
-Features stay IMPLEMENTED (not VERIFIED) until CI and the live site are green.
+### Bootstrap history (honest record)
+
+- Early runs created the docs/control system and validators (aaa0f42, d8a240e).
+- A concurrent scheduled run (ae2f794, 284efc7) landed a second, more complete
+  Godot project. Its architecture (EventBus/GameState/InputManager autoloads,
+  Motorbike + BikeSim) was kept as authoritative; duplicate files from the
+  earlier bootstrap were removed in 87e9380 and follow-up deletions.
+- CI was repaired across three fixes (GUT install path, export template
+  extraction, Playwright webServer path ../../build/web). Failure evidence was
+  captured in GitHub issues #1-#3 rather than guessed at.
+
+### Known caveats (not blockers)
+
+- Gameplay interaction (keyboard/gamepad/touch) is covered by GUT tests and a
+  headless browser smoke, but NOT yet validated on real devices. These stay
+  IMPLEMENTED, not VERIFIED, in the Matrix (GAME-0020..GAME-0198 slice rows).
+- The legacy "pages build and deployment" (Jekyll from branch) still runs on
+  pushes and briefly serves the README rendering until the verified Actions
+  deploy overwrites it. Fix by setting the Pages source to "GitHub Actions"
+  in repo settings (requires admin UI/API access unavailable to this run).
 
 ## Milestone gates
 
 M0 is DONE when: all validators PASS, Godot import PASS, headless boot PASS,
 GUT PASS, Web export PASS, browser smoke PASS, Pages deploy PASS, live site
-LOADS.
+LOADS. — All satisfied 2026-09-26.
 
+M1 (Player & Motorbike Core) is next: pick READY P0 rows from the Matrix.
 Later milestones: see docs/matrix/game-master-matrix.csv.

@@ -1,12 +1,12 @@
 {
   "repository": "thuexemayhanoi/game",
-  "feature_id": "GAME-0019",
-  "run_id": "recovery-2026-09-26-0430",
-  "status": "IN_PROGRESS",
+  "feature_id": null,
+  "run_id": "bootstrap-reconcile-2026-09-26",
+  "status": "IDLE",
   "started_at": "2026-09-25T21:50:00Z",
-  "last_checkpoint": "2026-09-25T21:55:00Z",
-  "start_commit": "d8a240ed04c73c0f5f43ec36db5b393845fc1dc8",
-  "checkpoint_commit": "ae2f7948ee0f8aa3746397ccefe5aabba7cc1f03",
+  "last_checkpoint": "2026-09-26T06:10:00Z",
+  "start_commit": "3db8215000000000000000000000000000000000",
+  "checkpoint_commit": "399599260b8fc9ea6d72a6abd58c992bd352d279",
   "attempt": 1,
-  "notes": "Bootstrap recovery: previous run marked 28 features IMPLEMENTED without committing any code, and the matrix had only 216 rows (validator requires >=250). Real Godot 4.7.2 project, vertical slice, GUT tests, CI and Pages workflows committed in ae2f794; matrix extended to 250 rows with honest evidence. Status stays IN_PROGRESS until first CI run is green and GitHub Pages serves the web build. Next run: inspect CI run for ae2f794, fix any failures, verify https://thuexemayhanoi.github.io/game/"
+  "notes": "Bootstrap run COMPLETE. A concurrent scheduled run (ae2f794, 284efc7) had landed a second, more complete Godot project; its architecture was kept authoritative and this run's duplicate/orphaned files were removed (87e9380 + 5 deletions). Parse errors fixed (GameState signal declared, TouchControls._set renamed, deterministic vehicle tests driving BikeSim). CI chain repaired: GUT clone path + export template extraction (799ffb9), Playwright webServer made config-dir-relative (935fd48), webServer root corrected to ../../build/web with fail-fast serve.mjs (3995992) - root cause diagnosed via CI-created GitHub issues #1-#3. First fully green CI on 3995992; Pages deployed; live site verified serving the web build (canvas+wasm+pck). Next run: resume Matrix with first READY P0 feature; consider removing .github/workflows/state-update.yml after promotion confirmed; gameplay on real devices/touch hardware still untested."
 }

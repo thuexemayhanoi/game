@@ -1,0 +1,41 @@
+# One-time (idempotent) bootstrap state promotion.
+# Promotes matrix/test/release rows via scripts/promote_bootstrap_state.py and
+# commits the result ONLY when something changed. The re-run triggered by its
+# own commit finds nothing to change and exits without committing, so there is
+# no commit loop. Safe to keep: it is a no-op unless the script finds rows to
+# promote. Remove this workflow after bootstrap promotion is confirmed.
+name: State update (bootstrap promotion)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: state-update
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Promote bootstrap rows
+        run: python3 scripts/promote_bootstrap_state.py
+      - name: Commit if changed
+        run: |
+          if ! git diff --quiet; then
+            git config user.name "game-ci-bot"
+            git config user.email "actions@github.com"
+            git add -A
+            git commit -m "chore(state): promote M0/test/release rows after first green CI and Pages deploy"
+            git push
+          else
+            echo "nothing to promote"
+          fi
