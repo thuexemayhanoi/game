@@ -5,6 +5,12 @@ import path from 'node:path';
 const root = path.resolve(process.argv[2] || 'build/web');
 const port = Number(process.argv[3] || 8000);
 
+// Fail fast if the root is wrong; a silent 404 server is worse than no server.
+if (!fs.existsSync(root)) {
+  console.error('serve.mjs: root directory not found: ' + root);
+  process.exit(1);
+}
+
 const MIME = {
   '.html': 'text/html',
   '.js': 'text/javascript',

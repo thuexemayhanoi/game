@@ -11,8 +11,10 @@ export default defineConfig({
   },
   webServer: {
     // Playwright runs webServer.command with cwd = the config file's directory
-    // (tests/browser/), so paths here must be relative to that directory.
-    command: 'node serve.mjs ../build/web 8000',
+    // (tests/browser/), which is TWO levels below the repo root, so the web
+    // build is at ../../build/web. (A single ../ was silently wrong: the
+    // server started but 404'd every file, which is what broke the smoke job.)
+    command: 'node serve.mjs ../../build/web 8000',
     port: 8000,
     reuseExistingServer: true,
     timeout: 20000,
