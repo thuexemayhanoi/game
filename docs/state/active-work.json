@@ -4,9 +4,9 @@
   "run_id": "bootstrap-2026-09-25",
   "status": "idle",
   "started_at": null,
-  "last_checkpoint": "2026-09-25T00:00:00Z",
-  "start_commit": null,
-  "checkpoint_commit": null,
+  "last_checkpoint": "2026-09-25T22:00:00Z",
+  "start_commit": "3db8215",
+  "checkpoint_commit": "653a96b",
   "attempt": 0,
-  "notes": "Bootstrap run complete; no feature locked. Next run: select first READY feature from game-master-matrix.csv."
+  "notes": "Bootstrap run complete: docs, matrix (268 rows), validators, Godot project, vertical slice, CI/Pages workflows pushed. Pending: CI verification and live Pages verification. Next run: check CI, then select first READY feature."
 }
