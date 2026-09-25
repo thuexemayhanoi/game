@@ -1,0 +1,2 @@
+release_id,version,platforms,status,commit,artifact_url,notes
+R-0001,0.1.0,web,PLANNED,,,Bootstrap release: vertical slice web build
