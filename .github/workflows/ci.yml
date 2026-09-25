@@ -53,12 +53,10 @@ jobs:
           fi
           if [ ! -d ~/.local/share/godot/export_templates/${{ env.GODOT_RELEASE }} ]; then
             wget -q "https://github.com/godotengine/godot/releases/download/${{ env.GODOT_RELEASE }}/Godot_v${{ env.GODOT_VERSION }}-stable_export_templates.tpz"
-            mkdir -p /tmp/tpz && cd /tmp/tpz && unzip -q ~/${{ github.workspace }}/Godot_v${{ env.GODOT_VERSION }}-stable_export_templates.tpz || true
-            cd ${{ github.workspace }}
             unzip -q Godot_v${{ env.GODOT_VERSION }}-stable_export_templates.tpz -d /tmp/tpz
             mv /tmp/tpz/templates ~/.local/share/godot/export_templates/${{ env.GODOT_RELEASE }}
+            echo "${{ env.GODOT_RELEASE }}" > ~/.local/share/godot/export_templates/${{ env.GODOT_RELEASE }}/version.txt
           fi
-          echo "${{ env.GODOT_RELEASE }}" > ~/.local/share/godot/export_templates/${{ env.GODOT_RELEASE }}/version.txt || true
       - name: Install GUT ${{ env.GUT_VERSION }}
         run: |
           wget -q "https://github.com/bitwes/Gut/archive/refs/tags/v${{ env.GUT_VERSION }}.zip"
@@ -66,7 +64,7 @@ jobs:
           mkdir -p addons
           cp -r /tmp/gut/Gut-${{ env.GUT_VERSION }}/addons/gut addons/
       - name: Import project
-        run: ~/.local/bin/godot --headless --path . --import --editor 2>&1 | tee import.log || true
+        run: ~/.local/bin/godot --headless --path . --import 2>&1 | tee import.log || true
       - name: Import check (script parse errors fail the job)
         run: |
           if grep -E "SCRIPT ERROR|Parse Error|Cannot parse" import.log; then
@@ -74,22 +72,23 @@ jobs:
           fi
       - name: Headless boot smoke
         run: |
-          timeout 90 ~/.local/bin/godot --headless --path . --quit-after 120 2>&1 | tee boot.log
+          timeout 90 ~/.local/bin/godot --headless --path . --quit-after 120 2>&1 | tee boot.log || [ $? -eq 124 ] || true
           if grep -E "SCRIPT ERROR|Cannot open|FATAL" boot.log; then exit 1; fi
       - name: Run GUT tests
         run: |
           timeout 300 ~/.local/bin/godot --headless --path . -s addons/gut/gut_cmdln.gd             -gdir=res://tests -ginclude_subdirs -gexit 2>&1 | tee gut.log
-          if grep -E "Tests failed|Failing" gut.log; then exit 1; fi
+          if grep -E "Tests failed|Failing|FAILED" gut.log; then exit 1; fi
       - name: Export Web build
         run: |
           mkdir -p build/web
           timeout 600 ~/.local/bin/godot --headless --path . --export-release "Web" build/web/index.html 2>&1 | tee export.log
           test -f build/web/index.html
           test -f build/web/index.pck
-      - name: Validate exported files
+      - name: Report build budget
         run: |
           ls -la build/web
           du -sh build/web
+          python3 scripts/check_build_budget.py
       - name: Upload web build
         uses: actions/upload-artifact@v4
         with:

@@ -10,10 +10,6 @@ run/main_scene="res://src/world/test_world.tscn"
 config/features=PackedStringArray("4.7")
 boot/enable_console=true
 
-[audio]
-
-buses/default_bus_layout=""
-
 [autoload]
 
 GameState="*res://src/core/game_state.gd"
@@ -25,7 +21,6 @@ window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
-window/handheld/orientation=1
 
 [input]
 
@@ -54,4 +49,3 @@ reset_bike={
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
-textures/vram_compression/import_etc2_astc=true

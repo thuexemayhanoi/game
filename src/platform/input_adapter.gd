@@ -23,7 +23,6 @@ func _register_actions() -> void:
 	_bind_key("steer_right", KEY_D)
 	_bind_key("steer_right", KEY_RIGHT)
 	_bind_key("reset_bike", KEY_R)
-	# Gamepad
 	_bind_joy_axis("throttle", JOY_AXIS_LEFT_Y, -1.0)
 	_bind_joy_axis("brake", JOY_AXIS_LEFT_Y, 1.0)
 	_bind_joy_axis("steer_left", JOY_AXIS_LEFT_X, -1.0)
@@ -60,7 +59,9 @@ func _bind_joy_button(action: String, button: int) -> void:
 func is_touch_device() -> bool:
 	if DisplayServer.is_touchscreen_available():
 		return true
-	return OS.has_feature("web") and 		JavaScriptBridge.is_instance_valid() and 		bool(JavaScriptBridge.eval("('ontouchstart' in window) || (navigator.maxTouchPoints > 0)", false)) if OS.has_feature("web") else false
+	if not OS.has_feature("web"):
+		return false
+	return JavaScriptBridge.eval("('ontouchstart' in window) || (navigator.maxTouchPoints > 0)", false)
 
 func get_throttle() -> float:
 	return clampf(Input.get_action_strength("throttle") + touch.throttle, 0.0, 1.0)
@@ -70,7 +71,7 @@ func get_brake() -> float:
 
 ## -1.0 (left) .. +1.0 (right)
 func get_steer() -> float:
-	var steer: = Input.get_action_strength("steer_right") - Input.get_action_strength("steer_left")
+	var steer := Input.get_action_strength("steer_right") - Input.get_action_strength("steer_left")
 	return clampf(steer + touch.steer, -1.0, 1.0)
 
 func just_reset() -> bool:
