@@ -10,7 +10,9 @@ export default defineConfig({
     baseURL: 'http://localhost:8000',
   },
   webServer: {
-    command: 'node tests/browser/serve.mjs build/web 8000',
+    // Playwright runs webServer.command with cwd = the config file's directory
+    // (tests/browser/), so paths here must be relative to that directory.
+    command: 'node serve.mjs ../build/web 8000',
     port: 8000,
     reuseExistingServer: true,
     timeout: 20000,
