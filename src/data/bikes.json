@@ -1,36 +1,12 @@
-{
-  "song_hong_50": {
-    "name": "Song Hong 50",
+[
+  {
+    "id": "scooter_default",
+    "display_name": "City Scooter",
     "category": "scooter",
-    "max_speed": 22,
-    "acceleration": 9,
-    "braking": 14,
-    "steer_speed": 2.2,
-    "drag": 1.2,
-    "reverse_speed": 4,
-    "price": 0
-  },
-  "ho_tay_sport": {
-    "name": "Ho Tay Sport",
-    "category": "sport_scooter",
-    "max_speed": 30,
-    "acceleration": 13,
-    "braking": 16,
-    "steer_speed": 2,
-    "drag": 1,
-    "reverse_speed": 4,
-    "price": 4500
-  },
-  "dien_thanh_cong": {
-    "name": "Dien Thanh Cong E1",
-    "category": "electric",
-    "max_speed": 18,
-    "acceleration": 7,
-    "braking": 12,
-    "steer_speed": 2.4,
-    "drag": 0.8,
-    "reverse_speed": 3,
-    "price": 3800,
-    "battery_wh": 2400
+    "max_speed": 27.8,
+    "acceleration": 7.5,
+    "brake_force": 13.0,
+    "turn_rate": 2.3,
+    "notes": "Starter scooter for the vertical slice. Original placeholder stats."
   }
-}
+]

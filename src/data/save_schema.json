@@ -1,54 +1,49 @@
 {
   "save_version": 1,
-  "description": "Versioned save schema for Hanoi Rider. See docs/SAVE-SYSTEM.md.",
   "profile": {
-    "type": "object",
-    "keys": {
-      "name": "string",
-      "created_at": "int"
-    }
+    "player_name": "string",
+    "playtime_seconds": "int >= 0",
+    "created_at": "ISO-8601 string"
   },
   "wallet": {
-    "type": "object",
-    "keys": {
-      "balance": "int"
-    }
+    "money": "int >= 0",
+    "ledger": "array of {id: string, amount: int, reason: string, timestamp: ISO-8601}"
   },
   "bikes": {
-    "type": "array",
-    "item": "bike_id:string + upgrades:object + condition:float"
+    "owned": "array of {id: string, condition: float 0..1, upgrades: [string], cosmetics: [string]}",
+    "current": "string bike id"
   },
   "upgrades": {
-    "type": "object"
+    "installed": "array of {bike_id: string, upgrade_id: string, level: int}"
   },
   "mission_progress": {
-    "type": "object",
-    "keys": {
-      "mission_id": {
-        "completed": "bool",
-        "reward_claimed": "bool"
-      }
-    }
+    "completed": "array of mission ids",
+    "active": "mission id or null"
   },
   "world_unlocks": {
-    "type": "object",
-    "keys": {
-      "districts": "array[string]",
-      "landmarks": "array[string]"
-    }
+    "districts": "array of district ids",
+    "garages": "array of garage ids"
   },
   "settings": {
-    "type": "object"
+    "audio_volumes": "object of float 0..1",
+    "quality_profile": "low|medium|high",
+    "controls": "object of action remaps",
+    "accessibility": "object of toggles"
   },
   "achievements": {
-    "type": "array[string]"
+    "unlocked": "array of achievement ids"
   },
   "statistics": {
-    "type": "object",
-    "keys": {
-      "distance_ridden": "float",
-      "missions_completed": "int"
-    }
+    "distance_km": "float",
+    "missions_done": "int",
+    "crashes": "int",
+    "playtime_seconds": "int"
   },
-  "migrations": []
+  "migrations": [
+    {
+      "from": 1,
+      "to": 1,
+      "description": "Baseline schema; no migration required yet."
+    }
+  ]
 }

@@ -1,31 +1,24 @@
-# Godot
+# Godot cache
 .godot/
 *.translation
-export_credentials.cfg
 
 # Builds
 build/
-export/
-*.apk
-*.aab
-*.ipa
-*.exe
-*.pck
+export.cfg
 
-# CI / tooling
+# Third-party addons fetched by CI (not vendored)
+addons/
+
+# Node / Playwright
 node_modules/
-test_results/
+package.json
+package-lock.json
 playwright-report/
-.pytest_cache/
-__pycache__/
+test-results/
+
+# Generated baselines
+docs/state/build-budget-baseline.json
 
 # OS
 .DS_Store
 Thumbs.db
-
-# Secrets — never commit
-*.keystore
-*.jks
-*.p12
-*.mobileprovision
-secrets.*

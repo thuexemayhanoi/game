@@ -1,30 +1,44 @@
 extends GutTest
-## Save schema + SaveManager roundtrip, versioning, corruption fallback.
+## Unit tests for the save schema and GameState round-trip (TEST-0010/0011).
 
-const SaveManager := preload("res://src/core/save_manager.gd")
+const SCHEMA := "res://src/data/save_schema.json"
 
-func test_default_save_valid():
-	var save: Dictionary = SaveManager.default_save()
-	assert_true(SaveManager.validate(save))
+func _schema() -> Dictionary:
+	var f := FileAccess.open(SCHEMA, FileAccess.READ)
+	if f == null:
+		return {}
+	var parsed = JSON.parse_string(f.get_as_text())
+	f.close()
+	if typeof(parsed) != TYPE_DICTIONARY:
+		return {}
+	return parsed
 
-func test_default_save_has_version():
-	assert_eq(SaveManager.default_save()["save_version"], 1)
+func test_schema_parses() -> void:
+	assert_gt(_schema().size(), 0, "save schema must parse as JSON")
 
-func test_load_from_dict_preserves_version():
-	var save: Dictionary = SaveManager.load_from_dict(SaveManager.default_save())
-	assert_eq(save["save_version"], SaveManager.CURRENT_SAVE_VERSION)
+func test_save_version_is_int() -> void:
+	assert_eq(typeof(_schema().get("save_version")), TYPE_INT)
 
-func test_corrupt_save_falls_back():
-	var save: Dictionary = SaveManager.load_from_dict({"garbage": true})
-	assert_true(save.get("migrated_from_corrupt", false), "corrupt save must be flagged")
+func test_required_keys_present() -> void:
+	var s := _schema()
+	for k in ["profile", "wallet", "bikes", "upgrades", "mission_progress", "world_unlocks", "settings", "achievements", "statistics", "migrations"]:
+		assert_true(s.has(k), "schema missing key: " + k)
+	assert_eq(typeof(s.get("migrations")), TYPE_ARRAY)
 
-func test_schema_json_has_required_keys():
-	var file := FileAccess.open("res://src/data/save_schema.json", FileAccess.READ)
-	assert_not_null(file)
-	if file == null:
-		return
-	var parsed = JSON.parse_string(file.get_as_text())
-	assert_true(parsed is Dictionary)
-	if parsed is Dictionary:
-		for key in ["save_version", "profile", "wallet", "bikes", "mission_progress", "achievements"]:
-			assert_has(parsed, key)
+func test_game_state_round_trip() -> void:
+	GameState.money = 150
+	GameState.reputation = 7
+	GameState.current_bike = "scooter_default"
+	var d := GameState.to_dict()
+	GameState.money = 0
+	GameState.reputation = 0
+	GameState.from_dict(d)
+	assert_eq(GameState.money, 150)
+	assert_eq(GameState.reputation, 7)
+	assert_eq(GameState.current_bike, "scooter_default")
+
+func test_game_state_rejects_invalid_data() -> void:
+	GameState.money = 100
+	GameState.from_dict({"money": "garbage", "current_bike": 42})
+	assert_eq(GameState.money, 100, "invalid values must not corrupt state")
+	assert_eq(GameState.current_bike, "scooter_default")

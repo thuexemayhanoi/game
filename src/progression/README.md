@@ -1,5 +1,3 @@
-# progression
+# progression module
 
-Reputation, unlocks, chapters, achievements (M8).
-
-Module layout: see docs/ARCHITECTURE.md. Backlog: docs/matrix/game-master-matrix.csv.
+Planned. See docs/ARCHITECTURE.md and docs/matrix/game-master-matrix.csv.

@@ -1,19 +1,31 @@
 extends GutTest
-## Bike data loads from src/data/bikes.json and contains the slice bike.
+## Unit tests for data-driven bike stats (GAME-0044 / TEST-0013).
 
-func test_bikes_json_loads():
-	var data: Dictionary = BikeController._load_bike_data()
-	assert_gt(data.size(), 0)
+func test_default_bike_loads_from_data() -> void:
+	var b := BikeData.load_default()
+	assert_not_null(b)
+	assert_gt(b.max_speed, 0.0)
+	assert_gt(b.acceleration, 0.0)
+	assert_gt(b.brake_force, 0.0)
+	assert_gt(b.turn_rate, 0.0)
 
-func test_first_bike_has_required_stats():
-	var data: Dictionary = BikeController._load_bike_data()
-	assert_true(data.has("song_hong_50"))
-	var bike: Dictionary = data.get("song_hong_50", {})
-	for key in ["max_speed", "acceleration", "braking", "steer_speed"]:
-		assert_has(bike, key)
+func test_load_by_id() -> void:
+	var b := BikeData.load_by_id("scooter_default")
+	assert_not_null(b)
+	assert_eq(b.id, "scooter_default")
 
-func test_stats_load_into_controller():
-	var bike := BikeController.new()
-	add_child_autofree(bike)
-	bike.load_stats("song_hong_50")
-	assert_gt(float(bike.stats["max_speed"]), 0.0)
+func test_unknown_id_returns_null() -> void:
+	assert_null(BikeData.load_by_id("does_not_exist"))
+
+func test_invalid_entries_fall_back_to_defaults() -> void:
+	var b := BikeData.from_dict({"id": "x", "max_speed": -5.0, "acceleration": "bad"})
+	assert_gt(b.max_speed, 0.0, "invalid values must fall back to safe defaults")
+	assert_gt(b.acceleration, 0.0)
+
+func test_all_bikes_have_unique_ids() -> void:
+	var all := BikeData.load_all()
+	assert_gt(all.size(), 0)
+	var ids := {}
+	for b in all:
+		assert_false(ids.has(b.id), "duplicate bike id: " + b.id)
+		ids[b.id] = true

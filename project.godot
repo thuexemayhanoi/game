@@ -1,19 +1,20 @@
 ; Engine configuration file.
+; HANOI RIDER: OPEN CITY — Godot 4.7.2 stable, Compatibility renderer.
+
 config_version=5
 
 [application]
 
 config/name="Hanoi Rider: Open City"
-config/description="Original open-world motorbike action game set in a fictional Hanoi-inspired city."
-config/version="0.1.0"
 run/main_scene="res://src/world/test_world.tscn"
-config/features=PackedStringArray("4.7")
-boot/enable_console=true
+config/features=PackedStringArray("4.7", "GL Compatibility")
+config/icon="res://icon.svg"
 
 [autoload]
 
+EventBus="*res://src/core/event_bus.gd"
 GameState="*res://src/core/game_state.gd"
-InputAdapter="*res://src/platform/input_adapter.gd"
+InputManager="*res://src/platform/input_manager.gd"
 
 [display]
 
@@ -22,28 +23,9 @@ window/size/viewport_height=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
-[input]
+[input_devices]
 
-throttle={
-"deadzone": 0.2,
-"events": []
-}
-brake={
-"deadzone": 0.2,
-"events": []
-}
-steer_left={
-"deadzone": 0.2,
-"events": []
-}
-steer_right={
-"deadzone": 0.2,
-"events": []
-}
-reset_bike={
-"deadzone": 0.2,
-"events": []
-}
+pointing/emulate_touch_from_mouse=false
 
 [rendering]
 

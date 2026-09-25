@@ -1,31 +1,49 @@
 extends Node
-## Autoload: GameState. Global game settings, quality profile, session helpers.
-## Kept intentionally small: gameplay systems live in their own modules.
+## Global session state autoload. UI-free and headless-testable.
+## Persistent data uses stable string IDs; save schema is versioned.
 
-signal settings_changed(key: String, value: Variant)
+const SAVE_VERSION := 1
 
-const DEFAULT_SETTINGS := {
-	"master_volume": 0.8,
-	"music_volume": 0.6,
-	"sfx_volume": 0.8,
-	"ui_volume": 0.7,
-	"quality_profile": "MEDIUM",
-	"camera_shake": true,
-	"vibration": true,
-	"ui_scale": 1.0,
-	"text_scale": 1.0,
-}
+var money := 0
+var reputation := 0
+var current_bike := "scooter_default"
+var owned_bikes: Array[String] = ["scooter_default"]
 
-var settings: Dictionary = DEFAULT_SETTINGS.duplicate(true)
-var session := {"play_time": 0.0, "distance_ridden": 0.0}
+func add_money(amount: int) -> void:
+	if amount > 0:
+		money += amount
+		game_state_changed.emit()
 
-func set_setting(key: String, value: Variant) -> void:
-	settings[key] = value
-	settings_changed.emit(key, value)
+func try_spend(amount: int) -> bool:
+	if amount > 0 and money >= amount:
+		money -= amount
+		game_state_changed.emit()
+		return true
+	return false
 
-func get_setting(key: String, fallback: Variant = null) -> Variant:
-	return settings.get(key, fallback)
+func to_dict() -> Dictionary:
+	return {
+		"save_version": SAVE_VERSION,
+		"money": money,
+		"reputation": reputation,
+		"current_bike": current_bike,
+		"owned_bikes": owned_bikes.duplicate(),
+	}
 
-func reset_settings() -> void:
-	settings = DEFAULT_SETTINGS.duplicate(true)
-	settings_changed.emit("all", null)
+func from_dict(d: Dictionary) -> void:
+	var v = d.get("money", 0)
+	if typeof(v) == TYPE_INT or typeof(v) == TYPE_FLOAT:
+		money = int(v)
+	v = d.get("reputation", 0)
+	if typeof(v) == TYPE_INT or typeof(v) == TYPE_FLOAT:
+		reputation = int(v)
+	var cb = d.get("current_bike", "scooter_default")
+	if typeof(cb) == TYPE_STRING and not String(cb).is_empty():
+		current_bike = String(cb)
+	var ob = d.get("owned_bikes", [])
+	owned_bikes.clear()
+	if typeof(ob) == TYPE_ARRAY:
+		for entry in ob:
+			if typeof(entry) == TYPE_STRING:
+				owned_bikes.append(String(entry))
+	game_state_changed.emit()
