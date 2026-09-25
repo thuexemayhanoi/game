@@ -47,10 +47,10 @@ func _build() -> void:
 	btn_reset.button_down.connect(func() -> void: InputManager.touch_reset = true)
 
 func _bind_axis(btn: Button, action: String, value: float) -> void:
-	btn.button_down.connect(func() -> void: _set(action, value))
-	btn.button_up.connect(func() -> void: _set(action, 0.0))
+	btn.button_down.connect(func() -> void: _set_touch(action, value))
+	btn.button_up.connect(func() -> void: _set_touch(action, 0.0))
 
-func _set(action: String, value: float) -> void:
+func _set_touch(action: String, value: float) -> void:
 	match action:
 		"steer":
 			InputManager.touch_steer = value

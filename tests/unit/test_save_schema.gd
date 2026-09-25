@@ -16,8 +16,12 @@ func _schema() -> Dictionary:
 func test_schema_parses() -> void:
 	assert_gt(_schema().size(), 0, "save schema must parse as JSON")
 
-func test_save_version_is_int() -> void:
-	assert_eq(typeof(_schema().get("save_version")), TYPE_INT)
+func test_save_version_is_positive_number() -> void:
+	# Godot's JSON parser returns floats for all numbers, so int or float is valid.
+	var v = _schema().get("save_version", 0)
+	assert_true(typeof(v) == TYPE_INT or typeof(v) == TYPE_FLOAT,
+		"save_version must be numeric, got: " + str(typeof(v)))
+	assert_gt(float(v), 0.0)
 
 func test_required_keys_present() -> void:
 	var s := _schema()

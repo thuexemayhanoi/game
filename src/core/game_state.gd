@@ -4,6 +4,8 @@ extends Node
 
 const SAVE_VERSION := 1
 
+signal game_state_changed
+
 var money := 0
 var reputation := 0
 var current_bike := "scooter_default"

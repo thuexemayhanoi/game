@@ -17,6 +17,7 @@ func test_window_size_is_positive() -> void:
 	assert_gt(int(ProjectSettings.get_setting("display/window/size/viewport_height", 0)), 0)
 
 func test_autoloads_registered() -> void:
-	var autoloads: Dictionary = ProjectSettings.get_setting("autoload", {})
+	# Note: ProjectSettings.get_setting("autoload") is empty when Godot runs a
+	# script via -s, so verify the live autoload nodes in the scene tree instead.
 	for a in ["EventBus", "GameState", "InputManager"]:
-		assert_true(autoloads.has(a), "missing autoload: " + a)
+		assert_true(get_tree().root.has_node(a), "missing autoload: " + a)
