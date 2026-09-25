@@ -39,11 +39,15 @@ jobs:
           mv Godot_v4.7.2-stable_linux.x86_64 godot
           chmod +x godot
           curl -sSL -o templates.tpz https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_export_templates.tpz
-          mkdir -p ~/.local/share/godot/export_templates/4.7.2.stable
-          unzip -q templates.tpz -d ~/.local/share/godot/export_templates/4.7.2.stable
+          mkdir -p ~/.local/share/godot/export_templates
+          unzip -q templates.tpz -d ~/.local/share/godot/export_templates
+          mv ~/.local/share/godot/export_templates/templates ~/.local/share/godot/export_templates/4.7.2.stable
           ./godot --version | head -n 2
-      - name: Install GUT (not vendored; see docs/TESTING.md)
-        run: git clone --depth 1 https://github.com/bitwes/Gut.git addons/gut
+      - name: Install GUT 9.7.1 (not vendored; see docs/TESTING.md)
+        run: |
+          git clone --depth 1 --branch v9.7.1 https://github.com/bitwes/Gut.git /tmp/gut
+          mkdir -p addons
+          cp -r /tmp/gut/addons/gut addons/gut
       - name: Import project
         run: ./godot --headless --path . --import
       - name: Boot smoke (main scene, 300 frames)
@@ -61,7 +65,6 @@ jobs:
         with:
           name: web-build
           path: build/web
-          retention-days: 7
 
   browser-smoke:
     runs-on: ubuntu-latest
