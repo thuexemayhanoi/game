@@ -1,0 +1,12 @@
+{
+  "repository": "thuexemayhanoi/game",
+  "feature_id": null,
+  "run_id": "bootstrap-2026-09-25",
+  "status": "idle",
+  "started_at": null,
+  "last_checkpoint": "2026-09-25T00:00:00Z",
+  "start_commit": null,
+  "checkpoint_commit": null,
+  "attempt": 0,
+  "notes": "Bootstrap run complete; no feature locked. Next run: select first READY feature from game-master-matrix.csv."
+}
