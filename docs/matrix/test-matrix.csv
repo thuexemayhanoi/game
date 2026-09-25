@@ -19,3 +19,4 @@ TEST-0017,GAME-0015,EXPORT,ci.yml,web,yes,PENDING,,
 TEST-0018,GAME-0017,BROWSER,tests/browser/smoke.spec.ts,web,yes,PENDING,,
 TEST-0019,GAME-0095,BROWSER,tests/browser/smoke.spec.ts,web,yes,PENDING,,
 TEST-0020,GAME-0018,BROWSER,tests/browser/smoke.spec.ts,web,yes,PENDING,,
+TEST-0021,GAME-0040,UNIT,tests/unit/test_bike_sim.gd,all,yes,PENDING,,Added in bootstrap recovery ae2f794

@@ -1,12 +1,12 @@
 {
   "repository": "thuexemayhanoi/game",
-  "feature_id": null,
-  "run_id": "bootstrap-2026-09-25",
-  "status": "idle",
-  "started_at": null,
-  "last_checkpoint": "2026-09-25T22:00:00Z",
-  "start_commit": "3db8215",
-  "checkpoint_commit": "653a96b",
-  "attempt": 0,
-  "notes": "Bootstrap run complete: docs, matrix (268 rows), validators, Godot project, vertical slice, CI/Pages workflows pushed. Pending: CI verification and live Pages verification. Next run: check CI, then select first READY feature."
+  "feature_id": "GAME-0019",
+  "run_id": "recovery-2026-09-26-0430",
+  "status": "IN_PROGRESS",
+  "started_at": "2026-09-25T21:50:00Z",
+  "last_checkpoint": "2026-09-25T21:55:00Z",
+  "start_commit": "d8a240ed04c73c0f5f43ec36db5b393845fc1dc8",
+  "checkpoint_commit": "ae2f7948ee0f8aa3746397ccefe5aabba7cc1f03",
+  "attempt": 1,
+  "notes": "Bootstrap recovery: previous run marked 28 features IMPLEMENTED without committing any code, and the matrix had only 216 rows (validator requires >=250). Real Godot 4.7.2 project, vertical slice, GUT tests, CI and Pages workflows committed in ae2f794; matrix extended to 250 rows with honest evidence. Status stays IN_PROGRESS until first CI run is green and GitHub Pages serves the web build. Next run: inspect CI run for ae2f794, fix any failures, verify https://thuexemayhanoi.github.io/game/"
 }
