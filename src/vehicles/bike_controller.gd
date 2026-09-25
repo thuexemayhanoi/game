@@ -1,10 +1,9 @@
+class_name BikeController
 extends CharacterBody3D
 ## Arcade motorbike controller. Deterministic, testable outside the open world.
 ## Stats are data-driven from src/data/bikes.json by the spawn code.
 
 signal speed_changed(kmh: float)
-
-class_name BikeController
 
 var stats := {"max_speed": 22.0, "acceleration": 9.0, "braking": 14.0,
 	"steer_speed": 2.2, "drag": 1.2, "reverse_speed": 4.0}
