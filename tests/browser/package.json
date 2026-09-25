@@ -1,0 +1,7 @@
+{
+  "name": "hanoi-rider-browser-tests",
+  "private": true,
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  }
+}

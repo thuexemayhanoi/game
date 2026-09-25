@@ -1,0 +1,134 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  GODOT_VERSION: "4.7.2"
+  GODOT_RELEASE: "4.7.2-stable"
+  GUT_VERSION: "9.7.1"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Project validation
+        run: python3 scripts/validate_project.py
+      - name: Matrix validation
+        run: python3 scripts/validate_matrix.py
+      - name: Asset validation
+        run: python3 scripts/validate_assets.py
+      - name: Save schema validation
+        run: python3 scripts/validate_save_schema.py
+      - name: Build budget baseline
+        run: python3 scripts/check_build_budget.py
+
+  godot:
+    runs-on: ubuntu-latest
+    needs: validate
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache Godot
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.local/bin/godot
+            ~/.local/share/godot/export_templates
+          key: godot-${{ env.GODOT_RELEASE }}-${{ runner.os }}
+      - name: Setup Godot ${{ env.GODOT_RELEASE }}
+        run: |
+          mkdir -p ~/.local/bin ~/.local/share/godot/export_templates
+          if [ ! -f ~/.local/bin/godot ]; then
+            wget -q "https://github.com/godotengine/godot/releases/download/${{ env.GODOT_RELEASE }}/Godot_v${{ env.GODOT_VERSION }}-stable_linux.x86_64.zip"
+            unzip -q Godot_v${{ env.GODOT_VERSION }}-stable_linux.x86_64.zip -d /tmp/godot
+            mv /tmp/godot/Godot_v${{ env.GODOT_VERSION }}-stable_linux.x86_64 ~/.local/bin/godot
+            chmod +x ~/.local/bin/godot
+          fi
+          if [ ! -d ~/.local/share/godot/export_templates/${{ env.GODOT_RELEASE }} ]; then
+            wget -q "https://github.com/godotengine/godot/releases/download/${{ env.GODOT_RELEASE }}/Godot_v${{ env.GODOT_VERSION }}-stable_export_templates.tpz"
+            mkdir -p /tmp/tpz && cd /tmp/tpz && unzip -q ~/${{ github.workspace }}/Godot_v${{ env.GODOT_VERSION }}-stable_export_templates.tpz || true
+            cd ${{ github.workspace }}
+            unzip -q Godot_v${{ env.GODOT_VERSION }}-stable_export_templates.tpz -d /tmp/tpz
+            mv /tmp/tpz/templates ~/.local/share/godot/export_templates/${{ env.GODOT_RELEASE }}
+          fi
+          echo "${{ env.GODOT_RELEASE }}" > ~/.local/share/godot/export_templates/${{ env.GODOT_RELEASE }}/version.txt || true
+      - name: Install GUT ${{ env.GUT_VERSION }}
+        run: |
+          wget -q "https://github.com/bitwes/Gut/archive/refs/tags/v${{ env.GUT_VERSION }}.zip"
+          unzip -q v${{ env.GUT_VERSION }}.zip -d /tmp/gut
+          mkdir -p addons
+          cp -r /tmp/gut/Gut-${{ env.GUT_VERSION }}/addons/gut addons/
+      - name: Import project
+        run: ~/.local/bin/godot --headless --path . --import --editor 2>&1 | tee import.log || true
+      - name: Import check (script parse errors fail the job)
+        run: |
+          if grep -E "SCRIPT ERROR|Parse Error|Cannot parse" import.log; then
+            echo "::error::Godot script parse errors detected"; exit 1
+          fi
+      - name: Headless boot smoke
+        run: |
+          timeout 90 ~/.local/bin/godot --headless --path . --quit-after 120 2>&1 | tee boot.log
+          if grep -E "SCRIPT ERROR|Cannot open|FATAL" boot.log; then exit 1; fi
+      - name: Run GUT tests
+        run: |
+          timeout 300 ~/.local/bin/godot --headless --path . -s addons/gut/gut_cmdln.gd             -gdir=res://tests -ginclude_subdirs -gexit 2>&1 | tee gut.log
+          if grep -E "Tests failed|Failing" gut.log; then exit 1; fi
+      - name: Export Web build
+        run: |
+          mkdir -p build/web
+          timeout 600 ~/.local/bin/godot --headless --path . --export-release "Web" build/web/index.html 2>&1 | tee export.log
+          test -f build/web/index.html
+          test -f build/web/index.pck
+      - name: Validate exported files
+        run: |
+          ls -la build/web
+          du -sh build/web
+      - name: Upload web build
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-build
+          path: build/web
+
+  browser:
+    runs-on: ubuntu-latest
+    needs: godot
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download web build
+        uses: actions/download-artifact@v4
+        with:
+          name: web-build
+          path: build/web
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install Playwright
+        run: |
+          cd tests/browser
+          npm ci
+          npx playwright install --with-deps chromium
+      - name: Serve build
+        run: |
+          nohup python3 -m http.server 8080 --directory build/web > server.log 2>&1 &
+          sleep 2
+          curl -sf http://localhost:8080/index.html > /dev/null
+      - name: Browser smoke tests
+        run: |
+          cd tests/browser
+          npx playwright test
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: tests/browser/playwright-report
