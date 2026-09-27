@@ -56,3 +56,28 @@ LOADS. — All satisfied 2026-09-26.
 
 M1 (Player & Motorbike Core) is next: pick READY P0 rows from the Matrix.
 Later milestones: see docs/matrix/game-master-matrix.csv.
+
+## MH1 — MOTO HOP core game (VERIFIED rows)
+
+Completed 2026-09-27 on commit 1faa00a. Gate chain:
+
+| Gate | Result |
+|------|--------|
+| Python validators (project, matrix 271 rows, assets, save schema v2, build budget) | PASS |
+| Godot 4.7.2 import (0 script errors) | PASS |
+| Headless boot smoke (main scene) | PASS |
+| GUT 9.7.1 test suite | PASS — 56/56 |
+| Web export (single-threaded, compatibility renderer) | PASS |
+| Browser smoke (Playwright, 6 viewports incl. 320x568) | PASS — 6/6 |
+| GitHub Pages deployment from verified main build | PASS |
+| Live site https://thuexemayhanoi.github.io/game/ | SERVES MOTO HOP (title, wasm, pck verified) |
+
+Core MH1 rows (GAME-0251..GAME-0266) verified with evidence in the Matrix;
+presentation/feel rows (GAME-0254/0257/0261..0264) stay IMPLEMENTED until
+real-device testing happens. MH2 optional rows remain PLANNED.
+
+### Cleanup
+
+- Bootstrap one-shot state-update workflow (.github/workflows/state-update.yml) and
+  scripts/promote_bootstrap_state.py removed after the promotion was confirmed as a
+  stable no-op.

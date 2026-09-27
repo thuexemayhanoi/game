@@ -1,12 +1,12 @@
 {
   "repository": "thuexemayhanoi/game",
-  "feature_id": "GAME-0251",
+  "feature_id": null,
   "run_id": "motohop-pivot-2026-09-27",
-  "status": "IN_PROGRESS",
+  "status": "IDLE",
   "started_at": "2026-09-27T18:00:00Z",
-  "last_checkpoint": "2026-09-27T18:00:00Z",
+  "last_checkpoint": "2026-09-27T19:30:00Z",
   "start_commit": "1e2fd6856face1801eaad3bbf769143a44cf56fe",
-  "checkpoint_commit": "1e2fd6856face1801eaad3bbf769143a44cf56fe",
+  "checkpoint_commit": "1faa00abaca033df0db095896704c64fcfa91424",
   "attempt": 1,
-  "notes": "MOTO HOP pivot (GAME-0251..GAME-0266, milestone MH1) in progress: open-world runtime removed, new arcade runtime built (HopSim, PlayerBike, pooled obstacles, DifficultyManager/ScoreManager/ObstacleGenerator, save v2, menu/HUD, parallax, procedural audio), tests rewritten, docs and Matrix reconciled. Next: full CI chain (validate/import/boot/GUT/web export/browser smoke) then truthful Matrix promotion with evidence."
+  "notes": "MOTO HOP pivot COMPLETE. Full chain verified on 1faa00a: Python validators OK, Godot import 0 script errors, headless boot OK, GUT 56/56, web export OK (pck 55KB), browser smoke 6/6 viewports (incl 320x568, no horizontal scroll, tap works), Pages deployed, live site serves the Moto Hop build. Matrix: GAME-0251..GAME-0266 (core rows VERIFIED with evidence; presentation rows stay IMPLEMENTED pending real-device feel testing); open-world runtime removed (14 files); docs/Matrix/test-matrix reconciled honestly; save schema v2 with tested v1 migration; release R-0002 recorded. Local pre-push verification mirrored CI exactly (Godot 4.7.2 headless: import, boot 300 frames, GUT 56/56, web export). Bootstrap state-update workflow + promote script removed (promotion confirmed as no-op). Next: MH2 optional rows (collectibles GAME-0267, reduced motion GAME-0270), real-device touch testing, consider Pages source switch to GitHub Actions."
 }

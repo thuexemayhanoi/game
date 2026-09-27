@@ -1,2 +1,3 @@
 release_id,version,platforms,status,commit,artifact_url,notes
 R-0001,0.1.0,web,RELEASED,399599260b8fc9ea6d72a6abd58c992bd352d279,https://thuexemayhanoi.github.io/game/,Bootstrap release: vertical slice web build deployed from verified CI
+R-0002,0.2.0,web,RELEASED,1faa00abaca033df0db095896704c64fcfa91424,https://thuexemayhanoi.github.io/game/,"MOTO HOP arcade release: verified CI chain (validate/import/boot/GUT 56/56/web export/browser smoke 6 viewports) deployed via Actions to Pages; live site serves Moto Hop build"
