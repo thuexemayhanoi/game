@@ -4,8 +4,7 @@ import json, os, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SCHEMA = os.path.join(ROOT, 'src', 'data', 'save_schema.json')
-REQUIRED = ['save_version','profile','wallet','bikes','upgrades','mission_progress',
-            'world_unlocks','settings','achievements','statistics']
+REQUIRED = ['save_version','profile','wallet','arcade','settings','achievements','statistics']
 
 def fail(msg):
     print('SAVE FAIL: ' + msg); sys.exit(1)

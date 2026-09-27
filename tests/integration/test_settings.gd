@@ -19,5 +19,5 @@ func test_window_size_is_positive() -> void:
 func test_autoloads_registered() -> void:
 	# Note: ProjectSettings.get_setting("autoload") is empty when Godot runs a
 	# script via -s, so verify the live autoload nodes in the scene tree instead.
-	for a in ["EventBus", "GameState", "InputManager"]:
+	for a in ["EventBus", "GameState", "InputManager", "AudioManager"]:
 		assert_true(get_tree().root.has_node(a), "missing autoload: " + a)

@@ -1,7 +1,9 @@
 # ASSET POLICY
 
-All game IP must be original. Do not copy GTA or any other game's maps, characters, logos,
-mission scripts, storylines, dialogue, music, models, textures, or branding.
+All game IP must be original. Do not copy any game's (including Flappy Bird's and GTA's) maps,
+characters, logos, code, sprites, sounds, music, models, level layouts, or branding.
+The one-button endless-obstacle genre is generic; all concrete expression in MOTO HOP
+is original: procedural _draw() art and runtime-generated PCM audio.
 
 ## Third-party assets
 

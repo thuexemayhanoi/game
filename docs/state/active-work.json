@@ -1,12 +1,12 @@
 {
   "repository": "thuexemayhanoi/game",
-  "feature_id": null,
-  "run_id": "bootstrap-reconcile-2026-09-26",
-  "status": "IDLE",
-  "started_at": "2026-09-25T21:50:00Z",
-  "last_checkpoint": "2026-09-26T06:10:00Z",
-  "start_commit": "3db8215000000000000000000000000000000000",
-  "checkpoint_commit": "399599260b8fc9ea6d72a6abd58c992bd352d279",
+  "feature_id": "GAME-0251",
+  "run_id": "motohop-pivot-2026-09-27",
+  "status": "IN_PROGRESS",
+  "started_at": "2026-09-27T18:00:00Z",
+  "last_checkpoint": "2026-09-27T18:00:00Z",
+  "start_commit": "1e2fd6856face1801eaad3bbf769143a44cf56fe",
+  "checkpoint_commit": "1e2fd6856face1801eaad3bbf769143a44cf56fe",
   "attempt": 1,
-  "notes": "Bootstrap run COMPLETE. A concurrent scheduled run (ae2f794, 284efc7) had landed a second, more complete Godot project; its architecture was kept authoritative and this run's duplicate/orphaned files were removed (87e9380 + 5 deletions). Parse errors fixed (GameState signal declared, TouchControls._set renamed, deterministic vehicle tests driving BikeSim). CI chain repaired: GUT clone path + export template extraction (799ffb9), Playwright webServer made config-dir-relative (935fd48), webServer root corrected to ../../build/web with fail-fast serve.mjs (3995992) - root cause diagnosed via CI-created GitHub issues #1-#3. First fully green CI on 3995992; Pages deployed; live site verified serving the web build (canvas+wasm+pck). Next run: resume Matrix with first READY P0 feature; consider removing .github/workflows/state-update.yml after promotion confirmed; gameplay on real devices/touch hardware still untested."
+  "notes": "MOTO HOP pivot (GAME-0251..GAME-0266, milestone MH1) in progress: open-world runtime removed, new arcade runtime built (HopSim, PlayerBike, pooled obstacles, DifficultyManager/ScoreManager/ObstacleGenerator, save v2, menu/HUD, parallax, procedural audio), tests rewritten, docs and Matrix reconciled. Next: full CI chain (validate/import/boot/GUT/web export/browser smoke) then truthful Matrix promotion with evidence."
 }

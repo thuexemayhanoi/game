@@ -1,5 +1,14 @@
 # Milestone Status
 
+## MOTO HOP pivot (2026-09-27)
+
+The product direction changed from the open-world HANOI RIDER concept to
+**MOTO HOP**, a polished one-button arcade game for children (Matrix rows
+GAME-0251+, milestone MH1). The open-world runtime (BikeSim, Motorbike,
+TestWorld, TouchControls) was cleanly removed and replaced by the arcade
+runtime; the control system, validators, CI chain and M0 infrastructure were
+preserved. See README ("Direction change") and docs/GAME-DESIGN.md.
+
 ## M0 — Repository Foundation (DONE)
 
 Completed on 2026-09-26 when the full bootstrap gate chain passed:

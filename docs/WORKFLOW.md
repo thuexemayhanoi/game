@@ -1,4 +1,4 @@
-# WORKFLOW — HANOI RIDER
+# WORKFLOW — MOTO HOP
 
 ## Golden rule
 
