@@ -1,53 +1,30 @@
 extends Node
-## Autoload: unified bike input from keyboard, gamepad and touch overlays.
-## Actions are registered at runtime so they are available headless and in tests.
-
-const DEAD_ZONE := 0.15
-
-var touch_throttle := 0.0
-var touch_brake := 0.0
-var touch_steer := 0.0
-var touch_reset := false
+## Autoload (MOTO HOP): registers one-button arcade actions at runtime so they
+## exist headless and in tests; exposes small polling helpers.
+## Touch and mouse taps are handled by the game controller via _unhandled_input,
+## so tapping anywhere in the gameplay area always works without hover.
 
 func _ready() -> void:
 	_ensure_default_actions()
 
 func _ensure_default_actions() -> void:
-	if not InputMap.has_action("throttle"):
-		InputMap.add_action("throttle")
-		_add_key("throttle", KEY_W)
-		_add_key("throttle", KEY_UP)
-		_add_axis("throttle", JOY_AXIS_LEFT_Y, -1.0)
-	if not InputMap.has_action("brake"):
-		InputMap.add_action("brake")
-		_add_key("brake", KEY_S)
-		_add_key("brake", KEY_DOWN)
-		_add_axis("brake", JOY_AXIS_LEFT_Y, 1.0)
-		_add_joy_button("brake", JOY_BUTTON_A)
-	if not InputMap.has_action("steer_left"):
-		InputMap.add_action("steer_left")
-		_add_key("steer_left", KEY_A)
-		_add_key("steer_left", KEY_LEFT)
-		_add_axis("steer_left", JOY_AXIS_LEFT_X, -1.0)
-	if not InputMap.has_action("steer_right"):
-		InputMap.add_action("steer_right")
-		_add_key("steer_right", KEY_D)
-		_add_key("steer_right", KEY_RIGHT)
-		_add_axis("steer_right", JOY_AXIS_LEFT_X, 1.0)
-	if not InputMap.has_action("reset"):
-		InputMap.add_action("reset")
-		_add_key("reset", KEY_R)
-		_add_joy_button("reset", JOY_BUTTON_Y)
+	if not InputMap.has_action("hop"):
+		InputMap.add_action("hop")
+		_add_key("hop", KEY_SPACE)
+		_add_key("hop", KEY_UP)
+		_add_joy_button("hop", JOY_BUTTON_A)
+	if not InputMap.has_action("pause"):
+		InputMap.add_action("pause")
+		_add_key("pause", KEY_ESCAPE)
+		_add_key("pause", KEY_P)
+		_add_joy_button("pause", JOY_BUTTON_START)
+	if not InputMap.has_action("toggle_mute"):
+		InputMap.add_action("toggle_mute")
+		_add_key("toggle_mute", KEY_M)
 
 func _add_key(action: String, key: Key) -> void:
 	var ev := InputEventKey.new()
 	ev.physical_keycode = key
-	InputMap.action_add_event(action, ev)
-
-func _add_axis(action: String, axis: int, axis_value: float) -> void:
-	var ev := InputEventJoypadMotion.new()
-	ev.axis = axis
-	ev.axis_value = axis_value
 	InputMap.action_add_event(action, ev)
 
 func _add_joy_button(action: String, button: JoyButton) -> void:
@@ -55,23 +32,12 @@ func _add_joy_button(action: String, button: JoyButton) -> void:
 	ev.button_index = button
 	InputMap.action_add_event(action, ev)
 
-func _apply_deadzone(v: float) -> float:
-	var a := absf(v)
-	if a <= DEAD_ZONE:
-		return 0.0
-	return signf(v) * ((a - DEAD_ZONE) / (1.0 - DEAD_ZONE))
+## Poll once per frame from _process.
+func hop_requested() -> bool:
+	return Input.is_action_just_pressed("hop")
 
-func get_throttle() -> float:
-	return clampf(maxf(Input.get_action_strength("throttle"), touch_throttle), 0.0, 1.0)
+func pause_requested() -> bool:
+	return Input.is_action_just_pressed("pause")
 
-func get_brake() -> float:
-	return clampf(maxf(Input.get_action_strength("brake"), touch_brake), 0.0, 1.0)
-
-func get_steer() -> float:
-	var v := Input.get_action_strength("steer_right") - Input.get_action_strength("steer_left")
-	return clampf(_apply_deadzone(v + touch_steer), -1.0, 1.0)
-
-func get_reset_requested() -> bool:
-	var v: bool = touch_reset or Input.is_action_just_pressed("reset")
-	touch_reset = false
-	return v
+func mute_requested() -> bool:
+	return Input.is_action_just_pressed("toggle_mute")

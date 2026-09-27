@@ -1,49 +1,33 @@
 {
-  "save_version": 1,
+  "save_version": 2,
   "profile": {
     "player_name": "string",
-    "playtime_seconds": "int >= 0",
     "created_at": "ISO-8601 string"
   },
   "wallet": {
-    "money": "int >= 0",
-    "ledger": "array of {id: string, amount: int, reason: string, timestamp: ISO-8601}"
+    "coins": "int >= 0 (lifetime collectible coins)"
   },
-  "bikes": {
-    "owned": "array of {id: string, condition: float 0..1, upgrades: [string], cosmetics: [string]}",
-    "current": "string bike id"
-  },
-  "upgrades": {
-    "installed": "array of {bike_id: string, upgrade_id: string, level: int}"
-  },
-  "mission_progress": {
-    "completed": "array of mission ids",
-    "active": "mission id or null"
-  },
-  "world_unlocks": {
-    "districts": "array of district ids",
-    "garages": "array of garage ids"
+  "arcade": {
+    "best_score": "int >= 0"
   },
   "settings": {
-    "audio_volumes": "object of float 0..1",
-    "quality_profile": "low|medium|high",
-    "controls": "object of action remaps",
-    "accessibility": "object of toggles"
+    "muted": "bool",
+    "reduce_effects": "bool (planned)"
   },
   "achievements": {
     "unlocked": "array of achievement ids"
   },
   "statistics": {
-    "distance_km": "float",
-    "missions_done": "int",
-    "crashes": "int",
-    "playtime_seconds": "int"
+    "games_played": "int >= 0",
+    "total_score": "int >= 0",
+    "obstacles_passed": "int >= 0"
   },
+  "legacy_note": "Keys retained from the v1 open-world schema (bikes, upgrades, mission_progress, world_unlocks) are no longer written by MOTO HOP; the v1->v2 migration preserves them if an old save exists.",
   "migrations": [
     {
       "from": 1,
-      "to": 1,
-      "description": "Baseline schema; no migration required yet."
+      "to": 2,
+      "description": "MOTO HOP pivot: add arcade (best_score), settings (muted), wallet (coins); preserve any v1 open-world data untouched."
     }
   ]
 }

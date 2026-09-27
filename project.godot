@@ -1,12 +1,12 @@
 ; Engine configuration file.
-; HANOI RIDER: OPEN CITY — Godot 4.7.2 stable, Compatibility renderer.
+; MOTO HOP — Godot 4.7.2 stable, Compatibility renderer, mobile-web-first.
 
 config_version=5
 
 [application]
 
-config/name="Hanoi Rider: Open City"
-run/main_scene="res://src/world/test_world.tscn"
+config/name="Moto Hop"
+run/main_scene="res://src/core/moto_hop.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
@@ -15,13 +15,15 @@ config/icon="res://icon.svg"
 EventBus="*res://src/core/event_bus.gd"
 GameState="*res://src/core/game_state.gd"
 InputManager="*res://src/platform/input_manager.gd"
+AudioManager="*res://src/audio/audio_manager.gd"
 
 [display]
 
-window/size/viewport_width=1280
-window/size/viewport_height=720
+window/size/viewport_width=540
+window/size/viewport_height=960
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+window/handheld/orientation=1
 
 [input_devices]
 

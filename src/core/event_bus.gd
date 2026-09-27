@@ -1,6 +1,11 @@
 extends Node
-## Global event bus autoload. Systems communicate through signals only.
+## Global event bus autoload (MOTO HOP). Systems communicate through signals only.
 
-signal game_state_changed()
-signal bike_reset(position: Vector3)
-signal speed_changed(kmh: float)
+signal state_changed(new_state: int, old_state: int)
+signal score_changed(score: int)
+signal best_changed(best: int)
+signal milestone_reached(milestone: int)
+signal crashed
+signal hop_performed
+signal mute_changed(muted: bool)
+signal button_clicked
